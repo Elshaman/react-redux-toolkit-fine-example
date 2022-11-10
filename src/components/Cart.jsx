@@ -1,7 +1,15 @@
+import {useSelector , useDispatch} from 'react-redux'
 import productList from '../data/productList.json'
 import '../styles/cart.scss'
 
 const Cart = () => {
+
+  //se traen los cartProductId del store de cart
+  const {cartProductIds} = useSelector((state)=>state.cart)
+
+  //se seleccionan los productos cuyos id esten el el state.cart
+  const cartProductData = productList.products.filter((product) => )
+
   return (
     <div className="cart">
       <div className="cart-product">
