@@ -1,4 +1,5 @@
 import {useSelector , useDispatch} from 'react-redux'
+import cartSlice from '../data/cartSlice'
 import productList from '../data/productList.json'
 import '../styles/cart.scss'
 
@@ -8,20 +9,25 @@ const Cart = () => {
   const {cartProductIds} = useSelector((state)=>state.cart)
 
   //se seleccionan los productos cuyos id esten el el state.cart
-  const cartProductData = productList.products.filter((product) => )
+  const cartProductData = productList.products.filter((product) => cartProductIds.includes(product.id))
+
+  //se traen las acciones de remover 
+  const {removeFromCart , clearAllItems} = cartSlice.actions
+
+  const dispatch = useDispatch()
 
   return (
     <div className="cart">
-      <div className="cart-product">
+      { cartProductData.length > 0 && (<div className="cart-product">
         <h3 className="header">Items in cart</h3>
-        {productList.products.map((product) => (
+        { cartProductData.map((product) => (
           <div key={product.id} className="row">
             <img className="item-image" src={product.imageUrl} alt="product" />
 
             <div className="item-info">
               <h4>{product.name}</h4>
               <p className="text-truncate">{product.detail}</p>
-              <button className="btn btn-primary">
+              <button className="btn btn-primary" onClick={()=>dispatch(removeFromCart(product.id))}>
                 <i className="bi bi-trash-fill" /> Remove Item
               </button>
             </div>
@@ -29,15 +35,15 @@ const Cart = () => {
         ))}
 
         <footer className="text-center">
-          <button className="btn btn-primary">CHECKOUT</button>
+          <button className="btn btn-primary" onClick={()=>dispatch(clearAllItems())}>CHECKOUT</button>
         </footer>
-      </div>
+      </div>)}
 
-      <div className="text-center empty-cart">
+      {cartProductData.length<1 && (<div className="text-center empty-cart">
         <i className="bi bi-cart3" />
         <p>Your cart is empty.</p>
         <p>You have not added any item to your cart.</p>
-      </div>
+      </div>)}
     </div>
   )
 }
